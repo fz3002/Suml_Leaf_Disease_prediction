@@ -1,17 +1,22 @@
-import kagglehub
+from data_preparation.data_download import *
+from data_preparation.dataset import Dataset
 import os
-from PIL import Image
-import matplotlib.pyplot as plt
 
 
-path = kagglehub.dataset_download("warcoder/mango-leaf-disease-dataset")
+def prepare_dataset():
+    data_path = os.path.join(os.getcwd(), 'data', 'MangoLeafBD_Dataset', 'Anthracnose')
+    # download_dataset(data_path)
+    dataset: Dataset = Dataset(data_path=data_path)
+    # tutaj operacje z datasetem
 
-print("Path to dataset files:", path)
 
-image_files = [f for f in os.listdir(path) if f.endswith('.jpg')]
-for img_file in image_files[:5]:  # Display first 5 images
-    img_path = os.path.join(path, img_file)
-    img = Image.open(img_path)
-    plt.imshow(img)
-    plt.title(img_file)
-    plt.show()
+# Test
+
+def main():
+    prepare_dataset()
+
+
+
+if __name__ == '__main__':
+    main()
+
