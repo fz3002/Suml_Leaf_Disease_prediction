@@ -6,10 +6,14 @@ from torchvision import transforms
 
 class ImageDataHandler(Dataset):
     def __init__(self, data: list[tuple[str, str]], transform: transforms.Compose = None,
-                 batch_size: int = 32, shuffle: bool = True):
+                 batch_size: int = 32, shuffle: bool = True, num_workers: int = 1):
         self.data = data
         self.transform = transform
-        self.loader = DataLoader(self, batch_size=batch_size, shuffle=shuffle)
+        self.num_workers = num_workers
+        self.loader = DataLoader(self,
+                                 batch_size=batch_size,
+                                 shuffle=shuffle,
+                                 num_workers=self.num_workers)
 
     def __len__(self):
         return len(self.data)
