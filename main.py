@@ -4,10 +4,12 @@ import os
 
 
 def prepare_dataset():
-    data_path = os.path.join(os.getcwd(), 'data', 'MangoLeafBD_Dataset', 'Anthracnose')
+    data_path = os.path.join(os.getcwd(), 'data')
     # download_dataset(data_path)
     dataset: Dataset = Dataset(data_path=data_path)
-    # tutaj operacje z datasetem
+    dataset.visualize(0)
+    dataset.show_four_images()
+    dataset.show_data_stats()
 
 
 # Test
