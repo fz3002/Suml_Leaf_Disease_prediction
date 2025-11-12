@@ -1,8 +1,8 @@
-streamlit
+streamlit>=1.50
 setuptools>=80.9.0
 numpy>=2.0
-torch>=2.9.0
-matplotlib>=3.10.7
+pytorch>=2.5.1
+matplotlib>=3.10.6
 pillow>=11.3.0
-torchvision>=0.24.0
+torchvision>=0.20.1
 kagglehub>=0.3.13
