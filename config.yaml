@@ -2,7 +2,7 @@
 # =============== PATH SECTION ==============
 # ===========================================
 path:
-  raw: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/raw/mango-leaf-disease-dataset"
+  raw: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/raw"
   processed:
     root: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/processed"
     train: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/processed/train"
@@ -15,39 +15,31 @@ path:
 # ============ PREPROCESS SECTION ===========
 # ===========================================
 preprocess:
-  # Usuwanie szumu – przydatne na zdjęciach robionych telefonem
+  # Usuwanie szumu
   denoise:
     enable: false
-    method: "gaussian"              # "gaussian" / "median" / "bilateral"
+    method: "gaussian"
     kernel_size: 5
-
-  # 3. Wyrównanie histogramu – poprawia kontrast
+  # Wyrównanie histogramu – poprawia kontrast
   clahe:
     enable: false
     clip_limit: 2.0
     tile_grid_size: [8, 8]
-
-  # 5. Korekcja gamma – poprawia globalną jasność
+  # Korekcja gamma
   gamma_correction:
     enable: false
-    gamma: 1.0                      # 0.8 = jaśniej, 1.2 = ciemniej
-
-  # 7. Balans bieli – korekcja odcienia zielonego pod warunki oświetleniowe
+    gamma: 1.0
+  # Balans bieli
   white_balance:
     enable: false
-    method: "grayworld"             # "grayworld" / "learning-based"
-
-  # 10. Usunięcie obrazów uszkodzonych, pustych lub nieczytelnych
+    method: "grayworld"
+  # Usunięcie obrazów uszkodzonych, pustych lub nieczytelnych
   validate_images:
     enable: true
-    min_resolution: [100, 100]      # minimalny akceptowalny rozmiar
+    min_resolution: [100, 100]
     remove_corrupt: true
-
-  # 11. Walkę z duplikatami – często zdarzają się w datasetach z telefonów
   remove_duplicates:
     enable: false
-
-  # 12. Podział danych na train/val/test
   split:
     enable: true
     train_ratio: 0.7
