@@ -1,5 +1,5 @@
-from src.data_preparation import Dataset
-from src.data_preparation import ImageDataHandler
+from data_preparation import Dataset
+from data_preparation import ImageDataHandler
 from torchvision import transforms
 import os
 
