@@ -2,7 +2,15 @@
 # =============== PATH SECTION ==============
 # ===========================================
 path:
+  # Surowe, pobrane dane bez obróbki
   raw: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/1_raw"
+  # Dane podzielone na zbiór treningowy, testowy i walidayjny
+  split:
+    root: '/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/2_splitted'
+    train: '/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/2_splitted/train'
+    test: '/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/2_splitted/test'
+    val: '/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/2_splitted/val'
+  # Dane podzielone i przerobione preprocessingiem
   processed:
     root: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/3_processed"
     train: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/3_processed/train"
@@ -38,8 +46,10 @@ preprocess:
     enable: true
     min_resolution: [100, 100]
     remove_corrupt: true
+  # Usuwanie duplikatów
   remove_duplicates:
     enable: false
+  # Podzielenie zbiorów i w jakich proporcjach
   split:
     enable: true
     train_ratio: 0.7
