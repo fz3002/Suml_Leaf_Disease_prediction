@@ -2,14 +2,14 @@
 # =============== PATH SECTION ==============
 # ===========================================
 path:
-  raw: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/raw"
+  raw: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/1_raw"
   processed:
-    root: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/processed"
-    train: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/processed/train"
-    val: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/processed/val"
-    test: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/processed/test"
+    root: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/3_processed"
+    train: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/3_processed/train"
+    val: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/3_processed/val"
+    test: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/3_processed/test"
   model_weights:
-    root: '/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/weights'
+    root: '/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/4_weights'
 
 # ===========================================
 # ============ PREPROCESS SECTION ===========

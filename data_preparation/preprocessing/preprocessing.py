@@ -126,9 +126,9 @@ def preprocess_directory(dir_path: str, preprocess: dict) -> None:
 def preprocess_images() -> None:
     config = load_config_file()
 
-    train_path = config['path']['processed']['train']
-    val_path = config['path']['processed']['val']
-    test_path = config['path']['processed']['test']
+    train_path = config['path']['3_processed']['train']
+    val_path = config['path']['3_processed']['val']
+    test_path = config['path']['3_processed']['test']
 
     for class_name in os.listdir(train_path):
         full_path = os.path.join(train_path, class_name)

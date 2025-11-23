@@ -4,7 +4,7 @@ from data_preparation.preprocessing.preprocessing import *
 
 def download_dataset_to_local_dir() -> None:
     config = load_config_file()
-    raw_path = config.get('path').get('raw')
+    raw_path = config.get('path').get('1_raw')
     download_dataset(dest_path=raw_path)
 
 

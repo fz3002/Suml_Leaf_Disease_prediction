@@ -29,8 +29,8 @@ def download_dataset(dest_path=None):
 def prepare_raw_dataset() -> None:
     config = load_config_file()
 
-    processed_path = config["path"]["processed"]["root"]
-    raw_path = config["path"]["raw"]
+    processed_path = config["path"]["3_processed"]["root"]
+    raw_path = config["path"]["1_raw"]
     split_info = config["preprocess"]["split"]
 
     source_path = os.path.join(raw_path, "MangoLeafBD Dataset")
