@@ -18,9 +18,9 @@ path:
   # Dane podzielone i przerobione preprocessingiem
   processed:
     root: "data/3_processed"
-    train: "3_processed/train"
-    val: "3_processed/val"
-    test: "3_processed/test"
+    train: "data/3_processed/train"
+    val: "data/3_processed/val"
+    test: "data/3_processed/test"
 
   # Ścieżka do folderu z wagami modelu
   model_weights:

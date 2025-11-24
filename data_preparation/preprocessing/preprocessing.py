@@ -1,30 +1,30 @@
 import os
 import cv2
 import numpy as np
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import imagehash
 from pathlib import Path
 from data_preparation.preprocessing.data_util import load_config_file
 
 
-def remove_duplicates(folder_path, threshold=0):
-    folder_path = Path(folder_path)
-    hashes = {}
+def remove_duplicates(folder_path: str, threshold=0) -> None:
+    folder_path: Path = Path(folder_path)
+    hashes: dict[Path, imagehash.ImageHash] = {}
 
     for img_path in folder_path.glob("*"):
         try:
             hash_val = imagehash.phash(Image.open(img_path))
-        except Exception:
-            print(f"[remove_duplicates] Nie można wczytać {img_path}, pomijam.")
+        except (UnidentifiedImageError, OSError, ValueError) as e:
+            print(f"[WARNING] remove_duplicates() - can't open {img_path} : {e}")
             continue
 
-        found_duplicate = False
+        found_duplicate: bool = False
 
         for existing_path, existing_hash in hashes.items():
             if abs(hash_val - existing_hash) <= threshold:
-                print(f"[remove_duplicates] Duplikat: {img_path} → usuwam")
+                print(f"[INFO] removing duplicate: {img_path}")
                 os.remove(img_path)
-                found_duplicate = True
+                found_duplicate: bool = True
                 break
 
         if not found_duplicate:
@@ -40,7 +40,7 @@ def validate_images(folder_path, min_resolution=(100, 100), remove_corrupt=True)
             img = Image.open(img_path)
         except Exception:
             if remove_corrupt:
-                print(f"[validate_images] Uszkodzony plik: {img_path} → usunięty")
+                print(f"[validate_images] Uszkodzony plik: {img_path} -> usunięty")
                 os.remove(img_path)
             continue
 
@@ -58,6 +58,12 @@ def white_balance(img):
 
 
 def gamma_correction(img, gamma=1.0):
+    """
+    Gamma correction pojaśnia albo pociemnia obraz w sposób nieliniowy
+    :param img: Obraz
+    :param gamma: Współczynnik jasności
+    :return: Zmieniony obraz
+    """
     if gamma <= 0:
         return img
     inv_gamma = 1.0 / gamma
@@ -67,12 +73,19 @@ def gamma_correction(img, gamma=1.0):
 
 
 def apply_clahe(img, clip_limit=2.0, tile_grid_size=(8, 8)):
-    lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
-    l, a, b = cv2.split(lab)
+    """
+    Funkcja wyrównuje histogram z ograniczeniem kontrastu
+    :param img: Obraz
+    :param clip_limit:
+    :param tile_grid_size:
+    :return:
+    """
+    lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB) # Konwersja obrazu dp LAB
+    luminosity, green_red, blue_yellow = cv2.split(lab) # Bierzemy każdą wartość
     clahe = cv2.createCLAHE(clipLimit=clip_limit,
                              tileGridSize=tile_grid_size)
-    cl = clahe.apply(l)
-    merged = cv2.merge((cl, a, b))
+    luminosity_changed = clahe.apply(luminosity) # Aplikujemy na kanał jasności
+    merged = cv2.merge((luminosity_changed, green_red, blue_yellow))
     return cv2.cvtColor(merged, cv2.COLOR_LAB2BGR)
 
 
@@ -128,9 +141,9 @@ def preprocess_images() -> None:
 
     project_path: str = config['path']["project_path"]
 
-    train_path: str = os.path.join(project_path, config['path']['3_processed']['train'])
-    val_path: str = os.path.join(project_path, config['path']['3_processed']['val'])
-    test_path: str = os.path.join(project_path, config['path']['3_processed']['test'])
+    train_path: str = os.path.join(project_path, config['path']['processed']['train'])
+    val_path: str = os.path.join(project_path, config['path']['processed']['val'])
+    test_path: str = os.path.join(project_path, config['path']['processed']['test'])
 
     for class_name in os.listdir(train_path):
         full_path: str = os.path.join(train_path, class_name)
@@ -143,4 +156,3 @@ def preprocess_images() -> None:
     for class_name in os.listdir(test_path):
         full_path: str = os.path.join(test_path, class_name)
         preprocess_directory(full_path, config['preprocess'])
-

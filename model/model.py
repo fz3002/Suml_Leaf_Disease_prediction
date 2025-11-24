@@ -10,7 +10,7 @@ class SqueezeNet(nn.Module):
                  init_weights: bool = True,
                  ) -> None:
         super().__init__()
-        self.features = nn.Sequential(
+        self.features: nn.Sequential = nn.Sequential(
             nn.Conv2d(3, 96, kernel_size=7, stride=2),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2, ceil_mode=True),
@@ -29,8 +29,8 @@ class SqueezeNet(nn.Module):
             FireBlock(in_channels=512, squeeze_channels=64, expand1x1_channels=256, expand3x3_channels=256),
         )
 
-        self.final_conv = nn.Conv2d(in_channels=512, out_channels=num_classes, kernel_size=1)
-        self.classifier = nn.Sequential(
+        self.final_conv: nn.Conv2d = nn.Conv2d(in_channels=512, out_channels=num_classes, kernel_size=1)
+        self.classifier: nn.Sequential = nn.Sequential(
             nn.Dropout(p=dropout),
             self.final_conv,
             nn.ReLU(inplace=True),
@@ -41,18 +41,17 @@ class SqueezeNet(nn.Module):
             self._init_weights()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = self.features(x)
-        x = self.classifier(x)
-        x = torch.flatten(x, 1)
+        x: torch.Tensor = self.features(x)
+        x: torch.Tensor = self.classifier(x)
+        x: torch.Tensor = torch.flatten(x, 1)
         return x
 
-    def _init_weights(self):
+    def _init_weights(self) -> None:
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 if m is self.final_conv:
                     nn.init.normal_(m.weight, mean=0, std=0.01)
                 else:
                     nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
-
                 if m.bias is not None:
                     nn.init.constant_(m.bias, 0.0)

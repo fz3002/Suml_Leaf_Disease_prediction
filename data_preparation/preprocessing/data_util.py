@@ -48,16 +48,20 @@ def split_dataset(config_part: str) -> None:
     # Pobieramy potrzebne ścieżki: projektu i folderów
     config: dict = load_config_file()   # Pobieramy plik config.yaml w postaci słownika
     project_path: str = config["path"]["project_path"]  # Ścieżka do projektu
-    processed_path: str = os.path.join(project_path, config["path"][config_part]["root"])   # Wybrana ścieżka root
+    dest_path: str = os.path.join(project_path, config["path"][config_part]["root"])   # Wybrana ścieżka root
     raw_path: str = os.path.join(project_path, config["path"]["raw"])   # Ścieżka do surowego datasetu
     split_info: dict = config["preprocess"]["split"]    # Informacja o tym jak splitować dataset
     source_path: str = os.path.join(raw_path, "MangoLeafBD Dataset")    # Ściezka do surowego datasetu
 
+    if not os.path.exists(dest_path):
+        os.makedirs(dest_path, exist_ok=True)
+        print("[INFO] split_dataset() - Creating destination path")
+
     if split_info.get("enable"):
         # Docelowe ścieżki z podziałem na proces
-        train_dir: str = os.path.join(processed_path, "train")
-        val_dir: str = os.path.join(processed_path, "val")
-        test_dir: str = os.path.join(processed_path, "test")
+        train_dir: str = os.path.join(dest_path, "train")
+        val_dir: str = os.path.join(dest_path, "val")
+        test_dir: str = os.path.join(dest_path, "test")
 
         # Tworzymy docelowe ścieżki
         os.makedirs(train_dir, exist_ok=True)
@@ -158,3 +162,4 @@ def load_labels_map() -> dict[str, int]:
         label_map[class_name] = 0
         index += 1
     return label_map
+
