@@ -141,3 +141,20 @@ def load_config_file() -> dict:
     with open(config_path, 'r') as stream:
         config = yaml.safe_load(stream)
     return config
+
+
+def load_labels_map() -> dict[str, int]:
+    config = load_config_file()
+    label_map: dict[str, int] = {}
+    project_path: str = config["path"]["project_path"]
+    raw_path: str = config["path"]["raw"]
+
+    source_path = os.path.join(project_path, raw_path, "MangoLeafBD Dataset")
+
+    classes: list[str] = os.listdir(source_path)
+    classes = sorted(classes)
+    index: int = 0
+    for class_name in classes:
+        label_map[class_name] = 0
+        index += 1
+    return label_map
