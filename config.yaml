@@ -2,22 +2,29 @@
 # =============== PATH SECTION ==============
 # ===========================================
 path:
+  # Ściezka do projektu
+  project_path: '/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction'
+
   # Surowe, pobrane dane bez obróbki
-  raw: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/1_raw"
+  raw: "data/1_raw"
+
   # Dane podzielone na zbiór treningowy, testowy i walidayjny
   split:
-    root: '/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/2_splitted'
-    train: '/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/2_splitted/train'
-    test: '/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/2_splitted/test'
-    val: '/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/2_splitted/val'
+    root: 'data/2_splitted'
+    train: 'data/2_splitted/train'
+    test: 'data/2_splitted/test'
+    val: 'data/2_splitted/val'
+
   # Dane podzielone i przerobione preprocessingiem
   processed:
-    root: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/3_processed"
-    train: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/3_processed/train"
-    val: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/3_processed/val"
-    test: "/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/3_processed/test"
+    root: "data/3_processed"
+    train: "3_processed/train"
+    val: "3_processed/val"
+    test: "3_processed/test"
+
+  # Ścieżka do folderu z wagami modelu
   model_weights:
-    root: '/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction/data/4_weights'
+    root: 'data/4_weights'
 
 # ===========================================
 # ============ PREPROCESS SECTION ===========
@@ -28,27 +35,33 @@ preprocess:
     enable: false
     method: "gaussian"
     kernel_size: 5
+
   # Wyrównanie histogramu – poprawia kontrast
   clahe:
     enable: false
     clip_limit: 2.0
     tile_grid_size: [8, 8]
+
   # Korekcja gamma
   gamma_correction:
     enable: false
     gamma: 1.0
+
   # Balans bieli
   white_balance:
     enable: false
     method: "grayworld"
+
   # Usunięcie obrazów uszkodzonych, pustych lub nieczytelnych
   validate_images:
     enable: true
     min_resolution: [100, 100]
     remove_corrupt: true
+
   # Usuwanie duplikatów
   remove_duplicates:
     enable: false
+
   # Podzielenie zbiorów i w jakich proporcjach
   split:
     enable: true
@@ -62,14 +75,15 @@ preprocess:
 # ============== TRANSFORMS =================
 # ===========================================
 transforms:
+  # Transformacje zdjęć wykonywane podczas treningu
   train:
-    resize: [224, 224]
-    random_horizontal_flip: true
-    random_rotation: 20
-    color_jitter:
-      brightness: 0.2
-      contrast: 0.2
-      saturation: 0.2
+    resize: [224, 224]                # Zmieniamy rozmiar zdjęcia na [X, X]
+    random_horizontal_flip: true      # Losowo obracamy obraz lustrzanie
+    random_rotation: 20               # Losowo obracamy obraz o +/- 20 stopni
+    color_jitter:                     # Zmieniamy wskaźniki obrazu
+      brightness: 0.2                 # Jasność
+      contrast: 0.2                   # Kontrast
+      saturation: 0.2                 # Saturacja
     to_tensor: true
     normalize:
       mean: [0.485, 0.456, 0.406]

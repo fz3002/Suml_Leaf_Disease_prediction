@@ -126,19 +126,21 @@ def preprocess_directory(dir_path: str, preprocess: dict) -> None:
 def preprocess_images() -> None:
     config = load_config_file()
 
-    train_path = config['path']['3_processed']['train']
-    val_path = config['path']['3_processed']['val']
-    test_path = config['path']['3_processed']['test']
+    project_path: str = config['path']["project_path"]
+
+    train_path: str = os.path.join(project_path, config['path']['3_processed']['train'])
+    val_path: str = os.path.join(project_path, config['path']['3_processed']['val'])
+    test_path: str = os.path.join(project_path, config['path']['3_processed']['test'])
 
     for class_name in os.listdir(train_path):
-        full_path = os.path.join(train_path, class_name)
+        full_path: str = os.path.join(train_path, class_name)
         preprocess_directory(full_path, config['preprocess'])
 
     for class_name in os.listdir(val_path):
-        full_path = os.path.join(val_path, class_name)
+        full_path: str = os.path.join(val_path, class_name)
         preprocess_directory(full_path, config['preprocess'])
 
     for class_name in os.listdir(test_path):
-        full_path = os.path.join(test_path, class_name)
+        full_path: str = os.path.join(test_path, class_name)
         preprocess_directory(full_path, config['preprocess'])
 
