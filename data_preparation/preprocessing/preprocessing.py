@@ -8,6 +8,12 @@ from data_preparation.preprocessing.data_util import load_config_file
 
 
 def remove_duplicates(folder_path: str, threshold=0) -> None:
+    """
+
+    :param folder_path:
+    :param threshold:
+    :return:
+    """
     folder_path: Path = Path(folder_path)
     hashes: dict[Path, imagehash.ImageHash] = {}
 
@@ -30,7 +36,15 @@ def remove_duplicates(folder_path: str, threshold=0) -> None:
         if not found_duplicate:
             hashes[img_path] = hash_val
 
+
 def validate_images(folder_path, min_resolution=(100, 100), remove_corrupt=True):
+    """
+
+    :param folder_path:
+    :param min_resolution:
+    :param remove_corrupt:
+    :return:
+    """
     folder_path = Path(folder_path)
 
     for img_path in folder_path.glob("*"):
@@ -99,6 +113,7 @@ def denoise(img, method: str="gaussian", kernel_size: int=5):
     else:
         raise ValueError(f"Nieznana metoda denoise: {method}")
 
+
 def preprocess_directory(dir_path: str, preprocess: dict) -> None:
     remove_duplicates(dir_path)
     validate_images(dir_path)
@@ -110,7 +125,7 @@ def preprocess_directory(dir_path: str, preprocess: dict) -> None:
             continue
         img = cv2.imread(file_path)
         if img is None:
-            print(f"[WARN] Nie można wczytać pliku: {file_path}")
+            print(f"[WARNING] Nie można wczytać pliku: {file_path}")
             continue
 
         if preprocess['denoise']['enable']:
