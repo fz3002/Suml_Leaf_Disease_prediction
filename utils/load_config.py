@@ -4,7 +4,7 @@ import yaml
 from dataclasses import dataclass
 
 
-CONFIG_PATH = Path(__file__).parents[2] / 'config.yaml'
+CONFIG_PATH = Path(__file__).parents[1] / 'config.yaml'
 
 
 @dataclass
@@ -56,10 +56,13 @@ class ProcessedConfig:
     num_workers: int
 
 @dataclass
-class MLFLowConfig:
+class MLFlowConfig:
     ui_enabled: bool
     tracking_url: str
+    artifact_root: str
     experiment_name: str
+    host: str
+    port: int
     log_params: bool
     log_metrics: bool
     log_artifacts: bool
@@ -77,7 +80,7 @@ class ConfigContent:
     train: TrainConfig
     val: ProcessedConfig
     test: ProcessedConfig
-    mlflow: MLFLowConfig
+    mlflow: MLFlowConfig
 
 
 def load_config_file() -> ConfigContent:
@@ -94,13 +97,7 @@ def load_config_file() -> ConfigContent:
         train=TrainConfig(**content.get('train')),
         val=ProcessedConfig(**content.get('val')),
         test=ProcessedConfig(**content.get('test')),
-        mlflow=MLFLowConfig(**content.get('mlflow')),
+        mlflow=MLFlowConfig(**content.get('mlflow')),
     )
 
     return config_content
-
-
-if __name__ == '__main__':
-    config_content = load_config_file()
-    print(config_content)
-
