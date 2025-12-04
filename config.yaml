@@ -1,0 +1,166 @@
+# ===========================================
+# =============== PATH SECTION ==============
+# ===========================================
+path:
+  # Ściezka do projektu
+  project_path: '/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction'
+
+  # Surowe, pobrane dane bez obróbki
+  raw: "data/1_raw"
+
+  # Dane podzielone na zbiór treningowy, testowy i walidayjny
+  split:
+    root: 'data/2_splitted'
+    train: 'data/2_splitted/train'
+    test: 'data/2_splitted/test'
+    val: 'data/2_splitted/val'
+
+  # Dane podzielone i przerobione preprocessingiem
+  processed:
+    root: "data/3_processed"
+    train: "data/3_processed/train"
+    val: "data/3_processed/val"
+    test: "data/3_processed/test"
+
+  # Ścieżka do folderu z wagami modelu
+  model_weights:
+    root: 'data/4_weights'
+
+# ===========================================
+# ============ PREPROCESS SECTION ===========
+# ===========================================
+preprocess:
+  # Usuwanie szumu
+  denoise:
+    enable: false
+    method: "gaussian"
+    kernel_size: 5
+
+  # Wyrównanie histogramu – poprawia kontrast
+  clahe:
+    enable: false
+    clip_limit: 2.0
+    tile_grid_size: [8, 8]
+
+  # Korekcja gamma
+  gamma_correction:
+    enable: false
+    gamma: 1.0
+
+  # Balans bieli
+  white_balance:
+    enable: false
+    method: "grayworld"
+
+  # Usunięcie obrazów uszkodzonych, pustych lub nieczytelnych
+  validate_images:
+    enable: true
+    min_resolution: [100, 100]
+    remove_corrupt: true
+
+  # Usuwanie duplikatów
+  remove_duplicates:
+    enable: false
+
+  # Podzielenie zbiorów i w jakich proporcjach
+  split:
+    enable: true
+    train_ratio: 0.7
+    val_ratio: 0.15
+    test_ratio: 0.15
+    shuffle: true
+    seed: 42
+
+# ===========================================
+# ============== TRANSFORMS =================
+# ===========================================
+transforms:
+  # Transformacje zdjęć wykonywane podczas treningu
+  train:
+    resize: [224, 224]                # Zmieniamy rozmiar zdjęcia na [X, X]
+    random_horizontal_flip: true      # Losowo obracamy obraz lustrzanie
+    random_rotation: 20               # Losowo obracamy obraz o +/- 20 stopni
+    color_jitter:                     # Zmieniamy wskaźniki obrazu
+      brightness: 0.2                 # Jasność
+      contrast: 0.2                   # Kontrast
+      saturation: 0.2                 # Saturacja
+    to_tensor: true
+    normalize:
+      mean: [0.485, 0.456, 0.406]
+      std:  [0.229, 0.224, 0.225]
+
+  val:
+    resize: [224, 224]
+    center_crop: null
+    to_tensor: true
+    normalize:
+      mean: [0.485, 0.456, 0.406]
+      std:  [0.229, 0.224, 0.225]
+
+  test:
+    resize: [224, 224]
+    to_tensor: true
+    normalize:
+      mean: [0.485, 0.456, 0.406]
+      std:  [0.229, 0.224, 0.225]
+
+# ===========================================
+# =============== MODEL SECTION =============
+# ===========================================
+model:
+  name: "squeezenet"
+  version: "1.0"
+  num_classes: 7
+  init_weights: true
+  dropout: 0.1
+
+# ===========================================
+# ============== TRAIN SECTION ==============
+# ===========================================
+train:
+  batch_size: 32
+  epochs: 30
+  learning_rate: 0.001
+  weight_decay: 0.0005
+  optimizer: "adam"
+  scheduler:
+    enable: true
+    type: "StepLR"
+    step_size: 10
+    gamma: 0.1
+  num_workers: 4
+  device: "cuda"
+  seed: 42
+  run_name: 'First_test'
+
+# ===========================================
+# ================ VAL SECTION ==============
+# ===========================================
+val:
+  batch_size: 32
+  num_workers: 4
+
+# ===========================================
+# ================= TEST SECTION ============
+# ===========================================
+test:
+  batch_size: 32
+  num_workers: 4
+  save_predictions: true
+  predictions_file: "results/test_predictions.csv"
+
+# ===========================================
+# ================ MLFLOW SECTION ===========
+# ===========================================
+mlflow:
+  enable: true
+  tracking_uri: "file:./mlruns"
+  experiment_name: "mango_leaf_squeezenet"
+  run_name: "squeezenet_1.0_baseline"
+  log_params: true
+  log_metrics: true
+  log_artifacts: true
+  artifacts:
+    save_model: true
+    save_confusion_matrix: true
+    save_plots: true
