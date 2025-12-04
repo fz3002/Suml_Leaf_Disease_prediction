@@ -135,18 +135,6 @@ def split_dataset(config_part: str) -> None:
                 )
 
 
-def load_config_file() -> dict:
-    """
-    Funkcja wczytuje plik .yaml i zwraca cały plik jako słownik
-    :return: Zawartość pliku .yaml jako słownik
-    """
-    config_path = CONFIG_PATH / 'config.yaml' # Ścieżka do pliku config.yaml
-
-    with open(config_path, 'r') as stream:
-        config = yaml.safe_load(stream)
-    return config
-
-
 def load_labels_map() -> dict[str, int]:
     config = load_config_file()
     label_map: dict[str, int] = {}

@@ -6,7 +6,7 @@ path:
   project_path: '/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction'
 
   # Surowe, pobrane dane bez obróbki
-  raw: "data/1_raw"
+  raw: "/data/1_raw"
 
   # Dane podzielone na zbiór treningowy, testowy i walidayjny
   split:
@@ -23,8 +23,7 @@ path:
     test: "data/3_processed/test"
 
   # Ścieżka do folderu z wagami modelu
-  model_weights:
-    root: 'data/4_weights'
+  model_weights: 'data/4_weights'
 
 # ===========================================
 # ============ PREPROCESS SECTION ===========
@@ -146,17 +145,14 @@ val:
 test:
   batch_size: 32
   num_workers: 4
-  save_predictions: true
-  predictions_file: "results/test_predictions.csv"
 
 # ===========================================
 # ================ MLFLOW SECTION ===========
 # ===========================================
 mlflow:
-  enable: true
-  tracking_uri: "file:./mlruns"
+  ui_enabled: true
+  tracking_url: "file:./mlruns"
   experiment_name: "mango_leaf_squeezenet"
-  run_name: "squeezenet_1.0_baseline"
   log_params: true
   log_metrics: true
   log_artifacts: true
