@@ -1,4 +1,5 @@
 import os
+import random
 
 from PIL import Image
 from torch.utils.data import Dataset
@@ -32,6 +33,7 @@ class LeafDataset(Dataset):
             for image_path in os.listdir(class_path):
                 paths.append((os.path.join(class_path, image_path), class_name))
 
+        random.shuffle(paths)
         return paths
 
     def __len__(self) -> int:

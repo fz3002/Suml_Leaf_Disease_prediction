@@ -108,9 +108,7 @@ transforms:
 # =============== MODEL SECTION =============
 # ===========================================
 model:
-  name: "squeezenet"
-  version: "1.0"
-  num_classes: 7
+  num_classes: 8
   init_weights: true
   dropout: 0.1
 
@@ -118,15 +116,15 @@ model:
 # ============== TRAIN SECTION ==============
 # ===========================================
 train:
-  batch_size: 32
+  batch_size: 16
   epochs: 30
-  learning_rate: 0.001
+  learning_rate: 0.003
   weight_decay: 0.0005
   optimizer: "adam"
   scheduler:
-    enable: true
+    enable: false
     type: "StepLR"
-    step_size: 10
+    step_size: 2
     gamma: 0.1
   num_workers: 4
   device: "cuda"
@@ -137,30 +135,12 @@ train:
 # ================ VAL SECTION ==============
 # ===========================================
 val:
-  batch_size: 32
+  batch_size: 16
   num_workers: 4
 
 # ===========================================
 # ================= TEST SECTION ============
 # ===========================================
 test:
-  batch_size: 32
+  batch_size: 1
   num_workers: 4
-  save_predictions: true
-  predictions_file: "results/test_predictions.csv"
-
-# ===========================================
-# ================ MLFLOW SECTION ===========
-# ===========================================
-mlflow:
-  enable: true
-  tracking_uri: "file:./mlruns"
-  experiment_name: "mango_leaf_squeezenet"
-  run_name: "squeezenet_1.0_baseline"
-  log_params: true
-  log_metrics: true
-  log_artifacts: true
-  artifacts:
-    save_model: true
-    save_confusion_matrix: true
-    save_plots: true

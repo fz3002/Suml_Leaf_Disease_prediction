@@ -159,7 +159,7 @@ def load_labels_map() -> dict[str, int]:
     classes = sorted(classes)
     index: int = 0
     for class_name in classes:
-        label_map[class_name] = 0
+        label_map[class_name] = index
         index += 1
     return label_map
 

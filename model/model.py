@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from .blocks import FireBlock
+from model.blocks import FireBlock
 
 
 class SqueezeNet(nn.Module):
@@ -33,7 +33,6 @@ class SqueezeNet(nn.Module):
         self.classifier: nn.Sequential = nn.Sequential(
             nn.Dropout(p=dropout),
             self.final_conv,
-            nn.ReLU(inplace=True),
             nn.AdaptiveAvgPool2d((1, 1)),
         )
 
@@ -55,3 +54,36 @@ class SqueezeNet(nn.Module):
                     nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
                 if m.bias is not None:
                     nn.init.constant_(m.bias, 0.0)
+
+    def print_info(self) -> None:
+        total_params = 0
+        trainable_params = 0
+        param_memory = 0
+        grad_memory = 0
+
+        for p in self.parameters():
+            numel = p.numel()
+            total_params += numel
+            param_memory += numel * p.element_size()
+
+            if p.requires_grad:
+                trainable_params += numel
+                if p.grad is not None:
+                    grad_memory += numel * p.grad.element_size()
+
+        buffer_memory = 0
+        for b in self.buffers():
+            buffer_memory += b.numel() * b.element_size()
+
+        total_memory = param_memory + grad_memory + buffer_memory
+
+        print("===== SqueezeNet Model Info =====")
+        print(f"Total parameters:      {total_params:,}")
+        print(f"Trainable parameters: {trainable_params:,}")
+        print("---------------------------------")
+        print(f"Parameters memory: {param_memory / 1024 ** 2:.2f} MB")
+        print(f"Gradients memory:  {grad_memory / 1024 ** 2:.2f} MB")
+        print(f"Buffers memory:    {buffer_memory / 1024 ** 2:.2f} MB")
+        print("---------------------------------")
+        print(f"Total memory:      {total_memory / 1024 ** 2:.2f} MB")
+        print("=================================")
