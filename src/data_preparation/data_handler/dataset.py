@@ -5,7 +5,7 @@ from PIL import Image
 from torch.utils.data import Dataset
 from torchvision.transforms import Compose
 
-from data_preparation.preprocessing.data_util import load_config_file, load_labels_map
+from src.data_preparation.preprocessing.data_util import load_config_file, load_labels_map
 
 
 class LeafDataset(Dataset):

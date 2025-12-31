@@ -1,5 +1,5 @@
 import torchvision.transforms as t
-from data_preparation.preprocessing.data_util import load_config_file
+from src.data_preparation.preprocessing.data_util import load_config_file
 
 
 class Transforms:

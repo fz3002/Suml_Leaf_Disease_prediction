@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image, UnidentifiedImageError
 import imagehash
 from pathlib import Path
-from data_preparation.preprocessing.data_util import load_config_file
+from src.data_preparation.preprocessing.data_util import load_config_file
 
 
 def remove_duplicates(folder_path: str, threshold=0) -> None:

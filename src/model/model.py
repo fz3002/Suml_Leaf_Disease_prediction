@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from model.blocks import FireBlock
+from src.model.blocks import FireBlock
 
 
 class SqueezeNet(nn.Module):

@@ -6,7 +6,7 @@ import shutil
 import yaml
 from tqdm import tqdm
 
-CONFIG_PATH: Path = Path(__file__).parent.parent.parent
+CONFIG_PATH: Path = Path(__file__).parent.parent.parent.parent
 
 
 def download_dataset() -> None:

@@ -1,7 +1,7 @@
 from torch.utils.data import DataLoader
-from data_preparation.data_handler.dataset import LeafDataset
-from data_preparation.data_handler.transform import Transforms
-from data_preparation.preprocessing.data_util import load_config_file
+from src.data_preparation.data_handler.dataset import LeafDataset
+from src.data_preparation.data_handler.transform import Transforms
+from src.data_preparation.preprocessing.data_util import load_config_file
 
 
 class DataHandler:
