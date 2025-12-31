@@ -1,3 +1,4 @@
+import json
 import os
 from pathlib import Path
 
@@ -59,14 +60,29 @@ def train_one_epoch(model, loader, optimizer, criterion, device, num_classes) ->
 
 def save_checkpoint(path: Path, model, optimizer, scheduler, epoch: int, best_metric: float) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "epoch": epoch,
+        "best_metric": float(best_metric),
+        "model_state_dict": model.state_dict(),
+        "optimizer_state_dict": optimizer.state_dict() if optimizer is not None else None,
+        "scheduler_state_dict": scheduler.state_dict() if scheduler is not None else None,
+    }
+    torch.save(payload, path)
 
-def save_metrics(path: Path, train_metrics: dict, val_metrics: dict) -> None:
+
+def save_metrics(path: Path, train_metrics: dict, val_metrics: dict, epoch: int) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "epoch": epoch,
+        "train": train_metrics,
+        "val": val_metrics,
+    }
+    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
 def save_weights(path: Path, model) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-
+    torch.save(model.state_dict(), path)
 
 
 def fit(model_section: dict, train_section: dict, output_dir: str) -> None:
@@ -103,6 +119,8 @@ def fit(model_section: dict, train_section: dict, output_dir: str) -> None:
     print(f"scheduler: CosineAnnealingLR (eta_min={5e-7})")
     print("========================\n")
 
+    val_loss: float = 10.0
+
     for epoch in range(1, train_section["epochs"] + 1):
         print(f"\nEpoch {epoch:02d}/{train_section["epochs"]} | lr={optimizer.param_groups[0]['lr']:.2e}")
         train_metrics = train_one_epoch(
@@ -132,6 +150,17 @@ def fit(model_section: dict, train_section: dict, output_dir: str) -> None:
                         scheduler=scheduler,
                         epoch=epoch,
                         best_metric=val_metrics["loss"])
+        save_metrics(path=Path(output_dir) / "metrics" / f"epoch_{epoch}.json",
+                     train_metrics=train_metrics,
+                     val_metrics=val_metrics,
+                     epoch=epoch)
+        save_weights(path=Path(output_dir) / "weights" / f"epoch_{epoch}.pt",
+                     model=model)
+
+        if val_loss > val_metrics["loss"]:
+            val_loss = val_metrics["loss"]
+            save_weights(path=Path(output_dir) / "weights" / f"best.pt",
+                         model=model)
 
 
 if __name__ == '__main__':
