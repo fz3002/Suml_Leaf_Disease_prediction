@@ -5,11 +5,10 @@ from pathlib import Path
 from torch import nn, optim
 from torch.optim.lr_scheduler import CosineAnnealingLR
 
-from metrics import *
+from src.process.metrics import *
 from src.data_preparation.data_handler.datahandler import DataHandler
-from src.data_preparation.preprocessing.data_util import load_config_file
 from src.model.model import SqueezeNet
-from validate import validate_one_epoch
+from src.process.validate import validate_one_epoch
 
 
 def train_one_epoch(model, loader, optimizer, criterion, device, num_classes) -> dict[str, float]:
@@ -161,15 +160,9 @@ def fit(model_section: dict, train_section: dict, output_dir: str) -> None:
             val_loss = val_metrics["loss"]
             save_weights(path=Path(output_dir) / "weights" / f"best.pt",
                          model=model)
-
-
-if __name__ == '__main__':
-    config_content = load_config_file()
-    project_path = config_content["path"]["project_path"]
-    model_weights = config_content["path"]["model_weights"]["root"]
-    run_name = config_content["train"]["run_name"]
-    output_dir = os.path.join(project_path, model_weights, run_name)
-    fit(model_section=config_content["model"],
-        train_section=config_content["train"],
-        output_dir=str(output_dir))
-
+            save_checkpoint(path=Path(output_dir) / "checkpoints" / f"best.pt",
+                            model=model,
+                            optimizer=optimizer,
+                            scheduler=scheduler,
+                            epoch=epoch,
+                            best_metric=val_metrics["loss"])
