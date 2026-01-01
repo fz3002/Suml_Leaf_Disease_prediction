@@ -50,7 +50,7 @@ def remove_duplicates(folder_path: str, threshold: int = 0) -> None:
             hashes[img_path] = hash_val
 
 
-def validate_images(folder_path: str, min_resolution: tuple[int, int] = (100, 100), remove_corrupt: bool = True) -> None:
+def validate_images(folder_path: str, min_resolution: tuple[int, int]=(100, 100), remove_corrupt: bool = True) -> None:
     """
     Validate images in a directory and optionally remove invalid files.
 
@@ -112,54 +112,95 @@ def white_balance(img: np.ndarray) -> np.ndarray:
     return corrected
 
 
-def gamma_correction(img, gamma=1.0):
+def gamma_correction(img: np.ndarray, gamma: float = 1.0) -> np.ndarray:
     """
-    Gamma correction pojaśnia albo pociemnia obraz w sposób nieliniowy
-    :param img: Obraz
-    :param gamma: Współczynnik jasności
-    :return: Zmieniony obraz
+    Apply gamma correction to an image.
+
+    Gamma correction adjusts image brightness in a non-linear manner,
+    allowing the image to be brightened or darkened depending on the
+    gamma value.
+        - gamma > 1.0 darkens the image
+        - gamma < 1.0 brightens the image
+        - gamma <= 0 the input image is returned unchanged.
+
+    :param img: Input image as a numpy array.
+    :param gamma: Gamma correction factor.
+    :return: Corrected image with the same shape as the input.
     """
+    # Invalid gamma values result in no operation
     if gamma <= 0:
         return img
-    inv_gamma = 1.0 / gamma
-    table = np.array([(i / 255.0) ** inv_gamma * 255
-                      for i in range(256)]).astype("uint8")
+
+    # Inverse gamma used to build the lookup table
+    inv_gamma: float = 1.0 / gamma
+
+    # Build lookup table for pixel value transformation
+    table: np.ndarray = np.array([(i / 255.0) ** inv_gamma * 255 for i in range(256)], dtype="uint8")
+
+    # Apply gamma correction using a lookup table
     return cv2.LUT(img, table)
 
 
-def apply_clahe(img, clip_limit=2.0, tile_grid_size=(8, 8)):
+def apply_clahe(img: np.ndarray, clip_limit: float = 2.0, tile_grid_size: tuple = (8, 8)) -> np.ndarray:
     """
-    Funkcja wyrównuje histogram z ograniczeniem kontrastu
-    :param img: Obraz
-    :param clip_limit:
-    :param tile_grid_size:
-    :return:
+    Apply Contrast Limited Adaptive Histogram Equalization (CLAHE) to an image.
+
+    The function converts the input image from BGR to LAB color space,
+    applies CLAHE to the L (luminance) channel only, and then converts
+    the image back to BGR. This enhances local contrast while limiting
+    noise amplification.
+
+    :param img: Input image as a NumPy array in BGR color space.
+    :param clip_limit: Threshold for contrast limiting. Higher values increase contrast but may also amplify noise.
+    :param tile_grid_size : Size of the grid for histogram equalization (in tiles). Smaller tiles increase local contrast.
+    :return: Image with CLAHE applied, in BGR color space.
     """
-    lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB) # Konwersja obrazu dp LAB
-    luminosity, green_red, blue_yellow = cv2.split(lab) # Bierzemy każdą wartość
+    # Convert image from BGR to LAB color space
+    lab: np.ndarray = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
+
+    # Split LAB channels: L (luminance), A (green-red), B (blue-yellow)
+    luminosity: np.ndarray
+    green_red: np.ndarray
+    blue_yellow: np.ndarray
+    luminosity, green_red, blue_yellow = cv2.split(lab)
+
+    # Create CLAHE object
     clahe = cv2.createCLAHE(clipLimit=clip_limit, tileGridSize=tile_grid_size)
-    luminosity_changed = clahe.apply(luminosity) # Aplikujemy na kanał jasności
-    merged = cv2.merge((luminosity_changed, green_red, blue_yellow))
+
+    # Apply CLAHE to the luminance channel
+    luminosity_changed: np.ndarray = clahe.apply(luminosity)
+
+    # Merge channels back into LAB image
+    merged: np.ndarray = cv2.merge((luminosity_changed, green_red, blue_yellow))
+
+    # Convert image back to BGR color space
     return cv2.cvtColor(merged, cv2.COLOR_LAB2BGR)
 
 
-def denoise(img, method: str="gaussian", kernel_size: int=5):
+def denoise(img: np.ndarray, method: str = "gaussian", kernel_size: int = 5) -> np.ndarray:
     """
+    Apply noise reduction to an image using the specified denoising method.
 
-    :param img:
-    :param method:
-    :param kernel_size:
-    :return:
+    :param img: Input image as a numpy array.
+    :param method: Denoising method to apply. Supported values: gaussian, median, bilateral
+    :param kernel_size: Size of the kernel used for Gaussian and median filtering.
+    :return: Denoised image with the same shape as the input.
     """
-
+    # Apply Gaussian blur
     if method == "gaussian":
         return cv2.GaussianBlur(img, (kernel_size, kernel_size), 0)
+
+    # Apply median filtering
     elif method == "median":
         return cv2.medianBlur(img, kernel_size)
+
+    # Apply bilateral filtering (edge-preserving)
     elif method == "bilateral":
         return cv2.bilateralFilter(img, d=9, sigmaColor=75, sigmaSpace=75)
+
+    # Unsupported denoising method
     else:
-        raise ValueError(f"Nieznana metoda denoise: {method}")
+        raise ValueError(f"Unknown denoising method: {method}")
 
 
 def preprocess_directory(dir_path: str, preprocess: dict) -> None:
