@@ -124,7 +124,7 @@ train:
   num_workers: 4
   device: "cuda"
   seed: 42
-  run_name: 'third_test'
+  run_name: 'fourth_test'
 
 # ===========================================
 # ================ VAL SECTION ==============
