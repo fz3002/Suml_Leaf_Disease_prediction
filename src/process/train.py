@@ -2,6 +2,7 @@ import json
 import os
 from pathlib import Path
 
+import tqdm
 from torch import nn, optim
 from torch.optim.lr_scheduler import CosineAnnealingLR
 
@@ -9,6 +10,7 @@ from src.process.metrics import *
 from src.data_preparation.data_handler.datahandler import DataHandler
 from src.model.model import SqueezeNet
 from src.process.validate import validate_one_epoch
+import tqdm
 
 
 def train_one_epoch(model, loader, optimizer, criterion, device, num_classes) -> dict[str, float]:
@@ -21,9 +23,9 @@ def train_one_epoch(model, loader, optimizer, criterion, device, num_classes) ->
     f1s = []
     f1s_weighted = []
 
-    for images, labels in loader:
-        images = images.to(device, non_blocking=True).float()
-        labels = labels.to(device, non_blocking=True).long()
+    for images, labels in tqdm.tqdm(loader, leave=False):
+        images = images.to(device).float()
+        labels = labels.to(device).long()
 
         optimizer.zero_grad(set_to_none=True)
         logits = model(images)

@@ -116,14 +116,14 @@ model:
 # ===========================================
 train:
   batch_size: 16
-  epochs: 30
+  epochs: 50
   learning_rate: 0.0003
   weight_decay: 0.0005
   optimizer: "adam"
   num_workers: 4
   device: "cuda"
   seed: 42
-  run_name: 'fourth_test'
+  run_name: 'final'
 
 # ===========================================
 # ================ VAL SECTION ==============

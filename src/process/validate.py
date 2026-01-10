@@ -1,3 +1,5 @@
+import tqdm
+
 from src.process.metrics import *
 import torch
 
@@ -13,7 +15,7 @@ def validate_one_epoch(model, loader, criterion, device, num_classes) -> dict[st
     f1s = []
     f1s_weighted = []
 
-    for images, labels in loader:
+    for images, labels in tqdm.tqdm(loader, leave=False):
         images = images.to(device, non_blocking=True).float()
         labels = labels.to(device, non_blocking=True).long()
 

@@ -5,7 +5,7 @@ from src.process.inference import *
 
 def train(config_content: dict) -> None:
     project_path = config_content["path"]["project_path"]
-    model_weights = config_content["path"]["model_weights"]["root"]
+    model_weights = config_content["path"]["model_weights"]
     run_name = config_content["train"]["run_name"]
     output_dir = os.path.join(project_path, model_weights, run_name)
     fit(model_section=config_content["model"],
@@ -18,7 +18,7 @@ def validate(config_content: dict) -> None:
     num_classes = config_content["model"]["num_classes"]
     model = SqueezeNet(num_classes=num_classes).to(device)
     project_path = config_content["path"]["project_path"]
-    model_weights = config_content["path"]["model_weights"]["root"]
+    model_weights = config_content["path"]["model_weights"]
     run_name = config_content["train"]["run_name"]
     state_path: Path = Path(project_path) / model_weights / run_name / "weights" /"best.pt"
     state_dict = torch.load(state_path, map_location=device)
@@ -47,7 +47,5 @@ def interfere(config_content: dict) -> None:
 
 
 if __name__ == '__main__':
-    import torch, torchvision
-
-    print("torch:", torch.__version__, torch.__file__)
-    print("torchvision:", torchvision.__version__, torchvision.__file__)
+    content = load_config_file()
+    train(content)
