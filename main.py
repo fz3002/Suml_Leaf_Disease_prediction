@@ -47,5 +47,7 @@ def interfere(config_content: dict) -> None:
 
 
 if __name__ == '__main__':
-    config = load_config_file()
-    validate(config)
+    import torch, torchvision
+
+    print("torch:", torch.__version__, torch.__file__)
+    print("torchvision:", torchvision.__version__, torchvision.__file__)

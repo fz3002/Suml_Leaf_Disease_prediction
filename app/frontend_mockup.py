@@ -9,7 +9,7 @@ if 'uploaded_file' not in st.session_state:
     st.session_state.uploaded_file = None
 
 MOCK_FILE_PATH = os.path.join(
-    "frontend", "data", "placeholders", "mango_leaf_placeholder.jpg")
+    "app", "data", "placeholders", "mango_leaf_placeholder.jpg")
 MOCK_DISEASE = "Anthracnose (Mock Diagnosis)"
 MOCK_INFO = "Anthracnose is a common fungal disease of mangoes, especially in humid conditions."
 MOCK_RECOMMENDATIONS = "Apply copper-based fungicides regularly, particularly during flowering and fruiting periods."

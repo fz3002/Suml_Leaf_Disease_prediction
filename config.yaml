@@ -3,10 +3,10 @@
 # ===========================================
 path:
   # Ściezka do projektu
-  project_path: '/home/michal/PycharmProjects/Suml_Leaf_Disease_prediction'
+  project_path: 'C:/Users/Michał/PycharmProjects/SUML'
 
   # Surowe, pobrane dane bez obróbki
-  raw: "/data/1_raw"
+  raw: "data/1_raw"
 
   # Dane podzielone na zbiór treningowy, testowy i walidayjny
   split:

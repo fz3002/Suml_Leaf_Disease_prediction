@@ -46,7 +46,7 @@ def download_dataset() -> None:
         print("[INFO] download_dataset() - Creating destination path")
 
     # Copy downloaded dataset to the destination directory
-    shutil.copytree(path, dest_path)
+    shutil.copytree(path, dest_path, dirs_exist_ok=True)
 
     print(print("[INFO] download_dataset() - Saved dataset to: ", dest_path))
 
@@ -167,7 +167,7 @@ def load_config_file() -> dict:
     # Path to the configuration file
     config_path = CONFIG_PATH / 'config.yaml'
 
-    with open(config_path, 'r') as stream:
+    with open(config_path, 'r', encoding="utf-8") as stream:
         config = yaml.safe_load(stream)
 
     return config

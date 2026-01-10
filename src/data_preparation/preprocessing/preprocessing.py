@@ -85,8 +85,10 @@ def validate_images(folder_path: str, min_resolution: tuple[int, int]=(100, 100)
 
         # Check minimum resolution constraints
         if img.size[0] < min_resolution[0] or img.size[1] < min_resolution[1]:
-            print(f"[validate_images] Image resolution too small: {img_path} -> removed")
-            os.remove(img_path)
+            if os.path.exists(img_path):
+                print(f"[validate_images] Image resolution too small: {img_path} -> removed")
+                os.remove(img_path)
+
 
 
 def white_balance(img: np.ndarray) -> np.ndarray:
@@ -211,8 +213,8 @@ def preprocess_directory(dir_path: str, preprocess: dict) -> None:
     :return:
     """
 
-    remove_duplicates(dir_path)
     validate_images(dir_path)
+    remove_duplicates(dir_path)
 
     for filename in os.listdir(dir_path):
         file_path = os.path.join(dir_path, filename)
