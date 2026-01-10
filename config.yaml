@@ -25,6 +25,8 @@ path:
   # Ścieżka do folderu z wagami modelu
   model_weights: 'data/4_weights'
 
+weights: 'C:/Users/Michał/PycharmProjects/SUML/data/4_weights/BEST/best.pt'
+
 # ===========================================
 # ============ PREPROCESS SECTION ===========
 # ===========================================
