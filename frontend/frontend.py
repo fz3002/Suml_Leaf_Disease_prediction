@@ -136,7 +136,7 @@ def run():
                 col_info, col_rec = st.columns(2)
                 
                 with col_info:
-                    with st.expander(f"ℹ️ About {predicted_class.replace('_', ' ')}", expanded=True):
+                    with st.expander(f"ℹ️ Information", expanded=True):
                         st.write(disease_info["info"])
                 
                 with col_rec:

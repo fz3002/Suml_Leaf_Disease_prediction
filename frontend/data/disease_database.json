@@ -19,9 +19,9 @@
         "info": "Insect pest causing gall formations on leaves and panicles.",
         "recommendations": "Remove infested plant parts, apply systemic insecticides during flowering."
     },
-    "Leaf_Spot": {
-        "info": "Various fungal pathogens causing brown or black spots on leaves.",
-        "recommendations": "Remove affected leaves, apply fungicides, improve air circulation."
+    "Healthy": {
+        "info": "The leaf is healthy and shows no signs of disease or pest damage.",
+        "recommendations": "Continue regular monitoring and maintain good plant health practices. Ensure proper watering, nutrition, and pest management."
     },
     "Powdery_Mildew": {
         "info": "Fungal disease causing white powdery coating on leaves and stems.",
