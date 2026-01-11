@@ -1,0 +1,10 @@
+{
+  "Anthracnose": 0,
+  "Bacterial_Canker": 1,
+  "Cutting_Weevil": 2,
+  "Die_Back": 3,
+  "Gall_Midge": 4,
+  "Healthy": 5,
+  "Powdery_Mildew": 6,
+  "Sooty_Mould": 7
+}
