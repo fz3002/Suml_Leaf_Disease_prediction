@@ -80,7 +80,7 @@ def run():
             st.button("🔍 Diagnose", on_click=handle_diagnose, type="primary", use_container_width=True)
         
         st.markdown("---")
-    if st.session_state.diagnosed and st.session_state.uploaded_file is not None and st.session_state.model_service.model is not None:
+    if st.session_state.get('diagnosed', False) and st.session_state.get('uploaded_file') is not None and st.session_state.get('model_service') is not None and st.session_state.model_service.model is not None:
         uploaded_file = st.session_state.uploaded_file
         model_service = st.session_state.model_service
         
@@ -98,7 +98,7 @@ def run():
             # Display results
             st.subheader(f"📋 Diagnosis Result")
             
-            col1, col2, col3 = st.columns([1, 2, 1])
+            col1, col2 = st.columns([1, 2])
             
             with col1:
                 st.image(image_pil, caption="Uploaded Image", width='stretch')
@@ -111,17 +111,11 @@ def run():
                 )
                 
                 if confidence < 0.6:
-                    st.warning("⚠️ Low confidence prediction. Consider consulting an expert.")
+                    st.warning("⚠️ Low confidence - consider consulting an expert")
                 elif confidence >= 0.8:
                     st.success("✓ High confidence prediction")
                 else:
-                    st.info("ℹ️ Moderate confidence prediction")
-            
-            with col3:
-                st.metric(
-                    label="Confidence Score",
-                    value=f"{confidence*100:.1f}%"
-                )
+                    st.info("ℹ️ Moderate confidence")
             
             st.markdown("---")
             
@@ -137,6 +131,8 @@ def run():
                 with col_rec:
                     with st.expander("🛡️ Recommended Treatment", expanded=True):
                         st.write(disease_info["recommendations"])
+            else:
+                st.warning(f"No disease information found for '{predicted_class}'")
             
             st.markdown("---")
             
@@ -161,14 +157,14 @@ def run():
             st.error(f"❌ Error during diagnosis: {e}")
             st.error("Please ensure the image is a valid leaf photo.")
 
-    elif st.session_state.diagnosed and (st.session_state.uploaded_file is None or st.session_state.model_service.model is None):
+    elif st.session_state.get('diagnosed', False) and (st.session_state.get('uploaded_file') is None or st.session_state.get('model_service') is None or st.session_state.model_service.model is None):
         st.warning("⚠️ Unable to process diagnosis. Please check:")
-        if st.session_state.model_service.model is None:
+        if st.session_state.get('model_service') is not None and st.session_state.model_service.model is None:
             st.write("- Model weights file path in config.yaml")
-        if st.session_state.uploaded_file is None:
+        if st.session_state.get('uploaded_file') is None:
             st.write("- Upload an image file")
 
-    elif not st.session_state.diagnosed:
+    elif not st.session_state.get('diagnosed', False):
         st.info("👆 Upload a mango leaf image and click 'Diagnose' to get started")
 
 

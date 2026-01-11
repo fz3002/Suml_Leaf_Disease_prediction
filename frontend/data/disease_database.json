@@ -3,19 +3,19 @@
         "info": "Fungal disease causing dark spots on leaves, stems, and fruit. Common in humid conditions.",
         "recommendations": "Apply copper-based fungicides regularly, prune infected branches, improve air circulation."
     },
-    "Bacterial_Canker": {
+    "Bacterial Canker": {
         "info": "Bacterial disease causing necrotic lesions and cankers on stems and leaves.",
         "recommendations": "Remove infected branches, sterilize pruning tools, apply copper bactericide."
     },
-    "Cutting_Weevil": {
+    "Cutting Weevil": {
         "info": "Pest that causes V-shaped cuts on leaf margins.",
         "recommendations": "Use insecticidal sprays, remove heavily infested leaves, maintain plant vigor."
     },
-    "Die_Back": {
+    "Die Back": {
         "info": "Disease causing branch dieback, often due to environmental stress or fungal infection.",
         "recommendations": "Prune dead branches, improve drainage, apply fungicides if fungal."
     },
-    "Gall_Midge": {
+    "Gall Midge": {
         "info": "Insect pest causing gall formations on leaves and panicles.",
         "recommendations": "Remove infested plant parts, apply systemic insecticides during flowering."
     },
@@ -23,11 +23,11 @@
         "info": "The leaf is healthy and shows no signs of disease or pest damage.",
         "recommendations": "Continue regular monitoring and maintain good plant health practices. Ensure proper watering, nutrition, and pest management."
     },
-    "Powdery_Mildew": {
+    "Powdery Mildew": {
         "info": "Fungal disease causing white powdery coating on leaves and stems.",
         "recommendations": "Apply sulfur-based fungicides, increase light exposure, reduce humidity."
     },
-    "Sooty_Mould": {
+    "Sooty Mould": {
         "info": "Fungal disease appearing as black soot-like coating on leaves.",
         "recommendations": "Control honeydew-producing insects, apply fungicides, improve ventilation."
     }

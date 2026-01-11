@@ -149,7 +149,19 @@ class ModelService:
 
     def get_disease_info(self, disease_name: str) -> dict or None:
         """Get disease information and recommendations"""
-        return DISEASE_DATABASE.get(disease_name)
+        # Normalize disease_name: replace underscores with spaces to match database keys
+        normalized_name = disease_name.replace('_', ' ')
+        
+        # Try normalized name first (underscores → spaces)
+        if normalized_name in DISEASE_DATABASE:
+            return DISEASE_DATABASE[normalized_name]
+        
+        # Try original name
+        if disease_name in DISEASE_DATABASE:
+            return DISEASE_DATABASE[disease_name]
+        
+        print(f"[WARNING] Disease '{disease_name}' (normalized: '{normalized_name}') not found in database. Available: {list(DISEASE_DATABASE.keys())}")
+        return None
 
     def get_all_diseases(self) -> list:
         """Get list of all supported diseases"""
