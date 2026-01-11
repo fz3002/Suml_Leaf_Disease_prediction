@@ -52,29 +52,21 @@ def run():
                 st.error("Failed to load model. Check model path in config.yaml")
 
     with st.container():
-        col1, col2 = st.columns([1, 1])
+        st.subheader("📤 Upload Leaf Image")
+        uploaded_file = st.file_uploader(
+            "Choose a mango leaf image",
+            type=["png", "jpg", "jpeg", "webp"],
+            key="leaf_uploader"
+        )
         
-        with col1:
-            st.subheader("📤 Upload Leaf Image")
-            uploaded_file = st.file_uploader(
-                "Choose a mango leaf image",
-                type=["png", "jpg", "jpeg", "webp"],
-                key="leaf_uploader"
-            )
-            
-            if uploaded_file:
-                st.session_state.uploaded_file = uploaded_file
-
-        with col2:
-            st.subheader("⚙️ Settings")
-            confidence_threshold = st.slider(
-                "Confidence threshold",
-                min_value=0.0,
-                max_value=1.0,
-                value=0.5,
-                step=0.05
-            )
-
+        if uploaded_file:
+            st.session_state.uploaded_file = uploaded_file
+        elif uploaded_file is None and st.session_state.get('uploaded_file') is not None:
+            # User cleared the file - reset session state
+            st.session_state.uploaded_file = None
+            st.session_state.diagnosed = False
+            st.warning("File cleared. Upload a new image to diagnose.")
+        
         def handle_diagnose():
             if st.session_state.uploaded_file is not None and st.session_state.model_service.model is not None:
                 st.session_state.diagnosed = True
@@ -83,7 +75,10 @@ def run():
             else:
                 st.warning("Please upload an image first!")
 
-        st.button("🔍 Diagnose", on_click=handle_diagnose, type="primary", use_container_width=True)
+        col_button = st.columns([0.2, 0.6, 0.2])[1]
+        with col_button:
+            st.button("🔍 Diagnose", on_click=handle_diagnose, type="primary", use_container_width=True)
+        
         st.markdown("---")
     if st.session_state.diagnosed and st.session_state.uploaded_file is not None and st.session_state.model_service.model is not None:
         uploaded_file = st.session_state.uploaded_file
