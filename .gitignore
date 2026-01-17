@@ -215,4 +215,8 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
+
 .github/copilot-instructions.md
+data/1_raw
+data/2_splitted
+data/3_processed

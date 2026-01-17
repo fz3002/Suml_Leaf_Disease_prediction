@@ -178,15 +178,13 @@ def load_labels_map() -> dict[str, int]:
     Create a mapping from class names to integer labels.
 
     The function:
-    1. Loads the configuration file.
-    2. Builds the dataset directory path.
-    3. Reads class names from the dataset directory.
-    4. Assigns consecutive integer labels to each class
-       in alphabetical order.
+    1. First tries to read class names from dataset directory (dynamic loading)
+    2. If dataset not found, falls back to static JSON file (for inference without raw data)
+    3. Assigns consecutive integer labels to each class in alphabetical order.
 
     :return: Dictionary mapping class names to integer indices.
     """
-
+    
     config: dict = load_config_file()
     label_map: dict[str, int] = {}
     project_path: str = config["path"]["project_path"]
@@ -195,14 +193,35 @@ def load_labels_map() -> dict[str, int]:
     # Path to the dataset directory containing class subfolders
     source_path = os.path.join(project_path, raw_path, "MangoLeafBD Dataset")
 
-    # Read and sort class directory names
-    classes: list[str] = os.listdir(source_path)
-    classes = sorted(classes)
-
-    # Assign integer labels to classes
-    index: int = 0
-    for class_name in classes:
-        label_map[class_name] = index
-        index += 1
-
-    return label_map
+    # Try to load from dataset directory first (dynamic loading)
+    if os.path.exists(source_path):
+        try:
+            classes: list[str] = os.listdir(source_path)
+            classes = sorted(classes)
+            
+            # Assign integer labels to classes
+            index: int = 0
+            for class_name in classes:
+                label_map[class_name] = index
+                index += 1
+            
+            return label_map
+        except Exception:
+            pass  # Fall through to static JSON fallback
+    
+    # Fallback: try to load from static JSON file
+    static_map_path = Path(__file__).parent.parent.parent.parent / "frontend" / "data" / "labels_map.json"
+    if static_map_path.exists():
+        try:
+            import json
+            with open(static_map_path, "r", encoding="utf-8") as f:
+                label_map = json.load(f)
+            return label_map
+        except Exception as e:
+            raise FileNotFoundError(
+                f"Could not load labels map from dataset ({source_path}) or static JSON ({static_map_path}). Error: {e}"
+            )
+    
+    raise FileNotFoundError(
+        f"Dataset path not found ({source_path}) and static labels_map.json not found ({static_map_path})"
+    )

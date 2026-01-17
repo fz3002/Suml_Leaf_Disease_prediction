@@ -123,7 +123,7 @@ def fit(model_section: dict, train_section: dict, output_dir: str) -> None:
     val_loss: float = 10.0
 
     for epoch in range(1, train_section["epochs"] + 1):
-        print(f"\nEpoch {epoch:02d}/{train_section["epochs"]} | lr={optimizer.param_groups[0]['lr']:.2e}")
+        print(f"\nEpoch {epoch:02d}/{train_section['epochs']} | lr={optimizer.param_groups[0]['lr']:.2e}")
         train_metrics = train_one_epoch(
             model=model,
             loader=train_loader,
