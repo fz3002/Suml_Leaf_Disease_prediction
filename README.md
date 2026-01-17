@@ -1,10 +1,10 @@
-# Mango Leaf Disease Classification using SqueezeNet
+# Mango Leaf Disease Classification
 
 ## Project Overview
 
-This project focuses on automatic recognition of mango leaf diseases using a deep learning approach. The goal is to classify images of mango leaves into healthy or diseased categories based on visual symptoms present on the leaf surface.
+This project focuses on automatic recognition of mango leaf diseases using a deep learning. The goal is to classify images of mango leaves into healthy or diseased categories based on visual symptoms present on the leaf surface.
 
-The model used in this project is **SqueezeNet**, a lightweight convolutional neural network architecture, trained **from scratch** on a dataset of mango leaf images. The project was developed as an **academic / machine learning course project**, with emphasis on model understanding, training pipeline design, and evaluation.
+The model used in this project is SqueezeNet, a fully convolutional neural network, trained from scratch on a dataset of mango leaf images. The project was developed as an academic project for SUML class.
 
 ---
 
@@ -12,7 +12,7 @@ The model used in this project is **SqueezeNet**, a lightweight convolutional ne
 
 Plant diseases significantly affect agricultural productivity. Early and accurate identification of leaf diseases can help farmers take preventive actions and reduce crop losses.
 
-This project addresses the problem of **image-based disease classification** for mango leaves using convolutional neural networks.
+This project addresses the problem of disease classification for mango leaves and tries to come up with a solution to help farmers in identifying them.
 
 ---
 
@@ -100,3 +100,39 @@ The trained model was evaluated on a prepared evaluation set. But the plots also
 ---
 
 ## How to Run
+
+### Prerequisites
+
+- Python **3.11+**
+- Git
+- (Optional) NVIDIA GPU with CUDA support
+
+---
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/fz3002/Suml_Leaf_Disease_prediction.git
+```
+```bash
+cd Suml_Leaf_Disease_prediction
+```
+### 2. Create a Virtual Environment
+```bash
+python -m venv venv
+```
+### 3. Activate the Virtual Environment
+Linux
+```bash
+source venv/bin/activate
+```
+Windows
+```bash
+venv\Scripts\activate
+```
+### 4. Install Dependencies
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+### 5. Run Notebooks from 1
