@@ -46,17 +46,18 @@ class ModelService:
             self.config = config
 
             # Prepare model from config.yaml file
-            device_str = config["train"]["device"]  # Name of device, CPU or GPU
-            self.device = torch.device(device_str)  # CPU or GPU
-            num_classes = config["model"]["num_classes"]  # Number of classes
+            device_str = config["train"]["device"]  
+            self.device = torch.device(device_str)  
+            num_classes = config["model"]["num_classes"]
             model = SqueezeNet(num_classes=num_classes).to(
                 self.device
-            )  # Model instance
+            )
 
             # Load weights (build absolute path from project_path + weights)
             project_path = config["path"]["project_path"]
             weights_rel = config["weights"]
             import os
+
             weights_path = os.path.join(project_path, weights_rel)
             state_dict = torch.load(weights_path, map_location="cpu", weights_only=True)
             model.load_state_dict(state_dict)
@@ -71,9 +72,10 @@ class ModelService:
             return (model, self.labels_map, self.idx_to_class)
         except Exception as e:
             import traceback
+
             error_msg = f"Error loading model: {e}\n{traceback.format_exc()}"
             st.error(error_msg)
-            print(error_msg)  # Also print to console for debugging
+            print(error_msg)
             return None, None, None
 
     def get_transforms(self):
@@ -84,23 +86,22 @@ class ModelService:
 
     def predict(self, image_pil: Image.Image) -> dict:
         """
-        Predict disease from image (analogous to notebook 7 logic).
+        Predict disease from image.
 
         Args:
             image_pil: PIL Image object (RGB)
 
         Returns:
             dict with keys:
-                - predicted_class: str (disease name)
-                - confidence: float (0-1)
-                - probabilities: dict (all classes with scores)
-                - top_3: list of tuples (class_name, probability)
+                - predicted_class: str
+                - confidence: float
+                - probabilities: dict
+                - top_3: list of tuples
         """
         if self.model is None:
             raise ValueError("Model not loaded. Call load_model() first.")
 
         try:
-            # How to handle Photo? (from notebook 7)
             image = image_pil.convert("RGB")
 
             # Preparing Transforms
@@ -110,10 +111,9 @@ class ModelService:
             image = test_transform(image)
             image = image.unsqueeze(
                 dim=0
-            )  # Adding dimensions (3, 224, 224) -> (1, 3, 224, 224)
+            )
             image = image.to(self.device)  # Putting image on device (GPU or CPU)
 
-            # Now we have model and prepared image
             with torch.no_grad():
                 output = self.model(image)  # inference
                 probabilities = F.softmax(output, dim=1)  # Turn logits to probabilities
@@ -123,7 +123,7 @@ class ModelService:
             confidence = probabilities[0, class_idx].item()
             predicted_class = self.idx_to_class.get(class_idx, "Unknown")
 
-            # Showing probabilities for each class (sorted)
+            # Get probabilities for each class (sorted)
             probs_flat = probabilities.squeeze()
             all_probs = {
                 self.idx_to_class[i]: p.item() * 100 for i, p in enumerate(probs_flat)
@@ -150,17 +150,17 @@ class ModelService:
     def get_disease_info(self, disease_name: str) -> dict or None:
         """Get disease information and recommendations"""
         # Normalize disease_name: replace underscores with spaces to match database keys
-        normalized_name = disease_name.replace('_', ' ')
-        
-        # Try normalized name first (underscores → spaces)
+        normalized_name = disease_name.replace("_", " ")
+
         if normalized_name in DISEASE_DATABASE:
             return DISEASE_DATABASE[normalized_name]
-        
-        # Try original name
+
         if disease_name in DISEASE_DATABASE:
             return DISEASE_DATABASE[disease_name]
-        
-        print(f"[WARNING] Disease '{disease_name}' (normalized: '{normalized_name}') not found in database. Available: {list(DISEASE_DATABASE.keys())}")
+
+        print(
+            f"[WARNING] Disease '{disease_name}' (normalized: '{normalized_name}') not found in database. Available: {list(DISEASE_DATABASE.keys())}"
+        )
         return None
 
     def get_all_diseases(self) -> list:
