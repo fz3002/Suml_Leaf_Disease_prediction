@@ -135,4 +135,4 @@ venv\Scripts\activate
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
-### 5. Run Notebooks from 1
+### 5. Run Notebook 1, that will download and prepare data
